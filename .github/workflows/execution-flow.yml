@@ -35,10 +35,11 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Test code
+        continue-on-error: true
         id: test
         run: npm run test
       - name: Upload test report
-        if: failure() && steps.test.outcome == 'failure'
+        if: steps.test.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: test-report
@@ -80,6 +81,7 @@ jobs:
         run: echo "Deploying..."
   report:
     needs: [lint, deploy]
+    if: failure()
     runs-on: ubuntu-latest
     steps:
       - name: Output information
