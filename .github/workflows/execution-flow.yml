@@ -73,6 +73,13 @@ jobs:
     with:
       artifact_name: dist-files
 
+  print-deployment-status:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output deployment status
+        run: echo "${{ needs.deploy.outputs.deployment_status }}"
+
   report:
     needs: [lint, deploy]
     if: failure()
